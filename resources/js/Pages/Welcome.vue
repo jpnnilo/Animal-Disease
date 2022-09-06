@@ -30,7 +30,7 @@ defineProps({
          
 
             <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                <h2>TEST</h2>
+                <h2>WELCOME</h2>
             </div>
 
          

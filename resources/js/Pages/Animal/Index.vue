@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/inertia-vue3';
 import { Inertia } from "@inertiajs/inertia";
 import { Link } from '@inertiajs/inertia-vue3';
 import { useForm } from '@inertiajs/inertia-vue3'
-
+import { ref } from 'vue';
 
 
 const props = defineProps({
@@ -13,13 +13,9 @@ const props = defineProps({
 
 const form = useForm();
 
-let isActive = false;
+let isActive = ref(false);
 
 
-function active(){
-    isActive = !isActive;
-    console.log(isActive);
-}
 
 function destroy(animalId){
     form.delete(route('animal.destroy', animalId));
@@ -28,6 +24,62 @@ function destroy(animalId){
 </script>
 
 <template>
+
+<div class="container mx-auto">
+    <div class="flex justify-center">
+      <div
+        v-show="isActive"
+        class="
+          absolute
+          inset-0
+          flex
+          items-center
+          justify-center
+          bg-gray-700 bg-opacity-50
+        "
+        @click.self="isActive = false"
+        >
+        <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
+          <div class="flex items-center justify-between">
+            <h3 class="text-2xl">Model Title</h3>
+            <svg
+              @click="isActive = false"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-8 h-8 text-red-900 cursor-pointer"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div class="mt-4">
+            <p class="mb-4 text-sm">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+              Voluptatibus qui nihil laborum quaerat blanditiis nemo explicabo
+              voluptatum ea architecto corporis quo vitae, velit temporibus
+              eaque quisquam in quis provident necessitatibus.
+            </p>
+            <button
+              @click="isActive = false"
+              class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
+            >
+              Cancel
+            </button>
+            <button class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
     <Head title="Animal" />
@@ -38,10 +90,18 @@ function destroy(animalId){
                 List of Animal   
             </h2> 
            
+
         </template>
-            
+
           <template #default>
+                
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <button class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" @click="isActive = true">
+                        <svg class="mr-2 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            version="1.1" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
+                        Create Animal
+                    </button>
                     <table class="min-w-max w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-lg leading-normal">
