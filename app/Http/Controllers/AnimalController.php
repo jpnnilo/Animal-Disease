@@ -77,7 +77,9 @@ class AnimalController extends Controller
      */
     public function edit($id)
     {
-        //
+        // $form = Animal::find($id);
+        // // return Inertia::render('Animal/Index',compact('form'));
+        // return Inertia::render('Animal/Index',compact('form'));
     }
 
     /**
@@ -89,7 +91,22 @@ class AnimalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validate = $request->validate([
+            'name'=> 'required',
+            'breed'=> 'required',
+            'type'=> 'required',
+            'gender'=> 'required',
+            'age'=> 'required|numeric',
+            
+        ]);
+
+        $animal = Animal::find($id);
+        $animal->name = $request->name;
+        $animal->gender = $request->gender;
+        $animal->type = $request->type;
+        $animal->age = $request->age;
+        $animal->breed = $request->breed;
+        $animal->save();
     }
 
     /**

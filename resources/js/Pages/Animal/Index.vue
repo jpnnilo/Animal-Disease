@@ -5,15 +5,18 @@ import { Inertia } from "@inertiajs/inertia";
 import { Link } from '@inertiajs/inertia-vue3';
 import { useForm } from '@inertiajs/inertia-vue3'
 import { ref } from 'vue';
+import { reactive } from 'vue';
 
 
 const props = defineProps({
-    animals: Array
+    animals: Array,
+    // form:{},
 });
 
 
 
-const form = useForm({
+let form = useForm({
+    id:'',
     name:'',
     age: 0,
     breed:'',
@@ -23,14 +26,20 @@ const form = useForm({
 });
 
 let isActive = ref(false);
+let modalTitle = '';
 
 function destroy(animalId){
     form.delete(route('animal.destroy', animalId));
 }
 
 function create(){
-    form = {};
-
+    modalTitle = 'Create Animal';
+    console.log(modalTitle);
+    form.name = "";
+    form.age = "";
+    form.gender = "";
+    form.type = "";
+    form.breed = "";
 }
 
 function store(){
@@ -38,6 +47,30 @@ function store(){
     form.post(route('animal.store',form)); 
 } 
 
+function edit(animal){
+    console.log(animal);
+    modalTitle = "Update Animal";
+    form.id = animal.id;    
+    form.name = animal.name;
+    form.age = animal.age;
+    form.gender = animal.gender;
+    form.type = animal.type;
+    form.breed = animal.breed;
+}
+
+function update(animalId){
+    form.put(route('animal.update', animalId)); 
+} 
+
+function save(){
+    if(form.id){
+        update(form.id)
+    }else{
+        store()
+        create()
+    }
+
+}
 
 </script>
 
@@ -50,9 +83,10 @@ function store(){
         class=" absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 " @click.self="isActive = false" >
         
         <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl w-screen">
-            <form @submit.prevent="store">
+            
                 <div class="flex items-center justify-between">
-                    <h3 class="text-2xl">Model Title</h3>
+                    <h3 class="text-2xl">{{ modalTitle }}</h3>
+                    
                     <svg
                     @click="isActive = false"
                     xmlns="http://www.w3.org/2000/svg"
@@ -69,6 +103,7 @@ function store(){
                     />
                         </svg>
                 </div>
+            <form @submit.prevent="save">
                 <div class="my-3">
                     <label for="email" class="mb-3 block text-base font-medium text-[#07074D]" >
                         Name:
@@ -148,7 +183,7 @@ function store(){
           <template #default>
                 
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <button @click="isActive = true, create" class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" >
+                    <button @click="isActive = true, create()" class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" >
                         <svg class="mr-2 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             version="1.1" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
@@ -201,7 +236,7 @@ function store(){
                                                 </svg>
                                             </Link>
                                         </div>
-                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer" @click="isActive = true , edit(animal)">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                             </svg>
