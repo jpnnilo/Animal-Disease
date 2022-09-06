@@ -37,7 +37,24 @@ class AnimalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'name'=> 'required',
+            'breed'=> 'required',
+            'type'=> 'required',
+            'gender'=> 'required',
+            'age'=> 'required|numeric',
+            
+        ]);
+
+        $animal = new Animal;
+        $animal->name = $request->name;
+        $animal->gender = $request->gender;
+        $animal->type = $request->type;
+        $animal->age = $request->age;
+        $animal->breed = $request->breed;
+        $animal->save();
+
+        return redirect(route('animal.index'));
     }
 
     /**

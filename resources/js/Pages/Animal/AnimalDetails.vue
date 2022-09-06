@@ -65,7 +65,7 @@ const props = defineProps({
       <!-- Mini Cards -->
       <div class="mt-2 flex flex-row items-center space-x-5">
      
-        <div class="flex h-20 w-40 flex-col items-center justify-center ">
+        <div class="flex h-20 w-40 flex-col items-center justify-center">
           <div class="flex flex-row items-center justify-center">
             <span class="font-bold text-gray-600">{{ animal.type }}</span>
           </div>
@@ -108,7 +108,6 @@ const props = defineProps({
           <svg class="mr-2 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             version="1.1" width="24" height="24" viewBox="0 0 24 24">
             <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
-
           Add Disease
         </button>
 
