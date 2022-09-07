@@ -38,7 +38,7 @@ Route::middleware(['auth','verified'])->group(function(){
     ]);
 
     Route::post('addDisease',[AnimalController::class,'addDisease'])->name('addDisease');
-    Route::post('removeDisease',[AnimalController::class,'removeDisease'])->name('removeDisease');
+    Route::delete('removeDisease',[AnimalController::class,'removeDisease'])->name('removeDisease');
 });
 
 require __DIR__.'/auth.php';

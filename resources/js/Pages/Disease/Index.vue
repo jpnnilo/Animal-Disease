@@ -6,6 +6,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { useForm } from '@inertiajs/inertia-vue3'
 import { ref } from 'vue';
 import { reactive } from 'vue';
+import Swal from 'sweetalert2';
 
 
 const props = defineProps({
@@ -26,21 +27,24 @@ let form = useForm({
 let isActive = ref(false);
 let modalTitle = '';
 
-function destroy(diseaseId){
-    form.delete(route('disease.destroy', diseaseId));
-}
+
 
 function create(){
     modalTitle = 'Create disease';
-    console.log(modalTitle);
-    form.id = "";
-    form.name = "";
-    form.description = "";
+    form.reset()
 }
 
 function store(){
-    console.log(form);
-    form.post(route('disease.store',form)); 
+    form.post(route('disease.store',form), {
+        onSuccess: (response) => {console.log(response);
+        Swal.fire(
+            'Disease has been created!',
+            'Success!',
+            'success'
+        )
+        },
+    }); 
+   
 } 
 
 function edit(disease){
@@ -53,8 +57,39 @@ function edit(disease){
 }
 
 function update(diseaseId){
-    form.put(route('disease.update', diseaseId)); 
+    form.put(route('disease.update', diseaseId), {
+        onSuccess: (response) => {console.log(response);
+        Swal.fire(
+            'Disease has been updated!',
+            'Success!',
+            'success'
+        )
+        },
+    }); 
 } 
+
+function destroy(diseaseId){
+    Swal.fire({
+        title: 'Are you sure you want to delete?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+    if (result.isConfirmed) {
+        form.delete(route('disease.destroy', diseaseId));
+        Swal.fire(
+        'Deleted!',
+        'Disease has been deleted.',
+        'success'
+        )
+    }
+    })
+
+    
+}
 
 function save(){
     if(form.id){
@@ -63,7 +98,7 @@ function save(){
         store()
         create()
     }
-
+    form.reset()
 }
 
 

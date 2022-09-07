@@ -5,7 +5,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { Link } from '@inertiajs/inertia-vue3';
 import { useForm } from '@inertiajs/inertia-vue3';
 import {ref} from 'vue';
-
+import Swal from 'sweetalert2';
 
 
 const props = defineProps({
@@ -30,14 +30,43 @@ let form = useForm({
 
 function addDisease(animal_id){
     form.animal_id = animal_id;
-    form.post(route('addDisease'));
+    form.post(route('addDisease'),{
+        onSuccess: (response) => {
+            Swal.fire(
+                'Disease has been added!',
+                'Success!',
+                'success'
+            )
+        },
+    });
 }
 
 
 function removeDisease(animal_id, disease_id){
     form.animal_id = animal_id;
     form.disease_id = disease_id;
-    form.post(route('removeDisease'));
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.delete(route('removeDisease'));
+        Swal.fire(
+          'Deleted!',
+          'Disease has been removed.',
+          'success'
+        )
+      }
+    })
+
+
+    
+  
 }
 
 </script>
@@ -79,7 +108,7 @@ function removeDisease(animal_id, disease_id){
                           <div class="my-2 flex flex-row space-x-2">
                             <!-- Badge Role -->
                             <div class="flex flex-row">
-                              <div class="text-base text-gray-600">Status: <Span v-if="animal.diseases.length"> Sick</Span> <Span v-else> Healthy</Span></div>
+                              <div class="text-base text-gray-600">Status: <span v-if="animal.diseases.length"> Sick</span> <span v-else> Healthy</span></div>
                             </div>
 
                           </div>
@@ -199,8 +228,8 @@ function removeDisease(animal_id, disease_id){
                                         <option v-for="disease in diseases" :key="disease" :value="disease.id">{{ disease.name }}</option>
                                     </select>
                                 </div>
-                                <div v-if="form.errors.name">{{ form.errors.name }}</div>
-
+                                <div v-if="form.errors.disease_id">{{ form.errors.disease_id }}</div>
+                                
                                
                                 <div class="mt-4">
                     

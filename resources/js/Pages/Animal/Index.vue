@@ -1,4 +1,6 @@
 <script setup>
+
+import Swal from 'sweetalert2';
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head } from '@inertiajs/inertia-vue3';
 import { Inertia } from "@inertiajs/inertia";
@@ -25,39 +27,70 @@ let form = useForm({
 let isActive = ref(false);
 let modalTitle = '';
 
-function destroy(animalId){
-    form.delete(route('animal.destroy', animalId));
-}
 
 function create(){
-    form.id = "";
-    form.name = "";
-    form.age = null;
-    form.gender = "";
-    form.type = "";
-    form.breed = "";
+  form.reset()
 }
 
 function store(){
     console.log(form);
-    form.post(route('animal.store',form)); 
+    form.post(route('animal.store'), {
+        onSuccess: (response) => {console.log(response);
+        Swal.fire(
+            'Animal has been created!',
+            'Success!',
+            'success'
+        )
+        },
+    }); 
+    
+
 } 
 
 function edit(animal){
     console.log(animal);
-    modalTitle = "Update Animal";
     form.id = animal.id;    
     form.name = animal.name;
     form.age = animal.age;
     form.gender = animal.gender;
     form.type = animal.type;
     form.breed = animal.breed;
-    return modalTitle;
 }
 
 function update(animalId){
-    form.put(route('animal.update', animalId)); 
+    form.put(route('animal.update', animalId), {
+        onSuccess: (response) => {
+            Swal.fire(
+                'Animal has been updated!',
+                'Success!',
+                'success'
+            )
+        },
+    }); 
+    
 } 
+
+function destroy(animalId){
+    Swal.fire({
+        title: 'Are you sure you want to delete?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+    if (result.isConfirmed) {
+        form.delete(route('animal.destroy', animalId));
+        Swal.fire(
+        'Deleted!',
+        'Animal has been deleted.',
+        'success'
+        )
+    }
+    })
+    
+}
 
 function save(){
     if(form.id){
@@ -66,6 +99,7 @@ function save(){
         store()
         create()
     }
+    form.reset()
 }
 
 
@@ -167,7 +201,7 @@ function save(){
           <template #default>
                 
                 <div class="max-w-7xl mx-auto my-5 py-6 px-4 sm:px-6 lg:px-8 bg-white shadow">
-                    <button @click="isActive = true, create, modalTitle = 'Create Animal'" class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" >
+                    <button @click="isActive = true, create(), modalTitle = 'Create Animal'" class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" >
                         <svg class="mr-2 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             version="1.1" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
