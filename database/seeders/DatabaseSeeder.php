@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
         $animal = AnimalSeeder::class;
         $disease = DiseaseSeeder::class;
 
+      
+
         $this->call(compact('animal','disease'));
 
     }

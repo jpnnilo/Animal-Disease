@@ -27,10 +27,10 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <BreezeNavLink :href="route('animal.index')" :active="route().current('animal.index')">
+                                <BreezeNavLink :href="route('animal.index')" :active="route().current('animal.*')">
                                     Animal
                                 </BreezeNavLink>
-                                <BreezeNavLink :href="route('disease.index')" :active="route().current('disease.index')">
+                                <BreezeNavLink :href="route('disease.index')" :active="route().current('disease.*')">
                                     Disease
                                 </BreezeNavLink>
                                 
@@ -78,10 +78,10 @@ const showingNavigationDropdown = ref(false);
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <BreezeResponsiveNavLink :href="route('animal.index')" :active="route().current('animal.index')">
+                        <BreezeResponsiveNavLink :href="route('animal.index')" :active="route().current('animal.*')">
                             Animal
                         </BreezeResponsiveNavLink>
-                        <BreezeResponsiveNavLink :href="route('disease.index')" :active="route().current('disease.index')">
+                        <BreezeResponsiveNavLink :href="route('disease.index')" :active="route().current('disease.*')">
                             Disease
                         </BreezeResponsiveNavLink>
                         
@@ -106,8 +106,8 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Heading -->
             <header class="bg-white shadow" v-if="$slots.header">
-                <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 text-center">
+                    <slot name="header"  />
                 </div>
             </header>
 

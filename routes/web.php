@@ -30,7 +30,15 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('animal', AnimalController::class)->middleware(['auth', 'verified']);
-Route::resource('disease', DiseaseController::class)->middleware(['auth', 'verified']);
+
+Route::middleware(['auth','verified'])->group(function(){
+    Route::resources([
+        'animal' => AnimalController::class,
+        'disease'=> DiseaseController::class
+    ]);
+
+    Route::post('addDisease',[AnimalController::class,'addDisease'])->name('addDisease');
+    Route::post('removeDisease',[AnimalController::class,'removeDisease'])->name('removeDisease');
+});
 
 require __DIR__.'/auth.php';

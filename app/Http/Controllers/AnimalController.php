@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Animal;
+use App\Models\Disease;
 use Illuminate\Http\Request;
 
 class AnimalController extends Controller
@@ -57,6 +58,17 @@ class AnimalController extends Controller
         // return redirect(route('animal.index'));
     }
 
+    public function addDisease(Request $request){
+        
+        
+        $validate = $request->validate([
+            'disease_id'=> 'required',
+        ]);
+        $animal = Animal::find($request->animal_id);
+        $animal->diseases()->attach($request->disease_id);
+
+    }
+ 
     /**
      * Display the specified resource.
      *
@@ -65,8 +77,23 @@ class AnimalController extends Controller
      */
     public function show($id)
     {
-       $animal = Animal::find($id);
-       return Inertia::render('Animal/AnimalDetails',compact('animal'));
+        $animal = Animal::with('diseases')->find($id);
+        foreach ($animal->diseases as $diseases) {
+            $disease_array[] = $diseases->pivot->disease_id;
+            //get all diseases id from pivot table then pass it to array
+       }
+           
+       //this is to populate dropdown and check if the animal already has that disease
+       if(empty($disease_array)){
+           $diseases = Disease::all();
+             
+       }else{
+           $diseases = Disease::whereNotIn('id', $disease_array)->get();
+           //select all diseases id where not in id of array $disease_array
+       }
+
+       
+       return Inertia::render('Animal/AnimalDetails',compact('animal', 'diseases'));
     }
 
     /**
@@ -107,6 +134,7 @@ class AnimalController extends Controller
         $animal->save();
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -117,4 +145,10 @@ class AnimalController extends Controller
     {
         Animal::find($id)->delete();
     }
+
+    public function removeDisease(Request $request)
+    {   
+        $animal = Animal::find($request->animal_id);
+        $animal->diseases()->detach($request->disease_id);
+    }   
 }

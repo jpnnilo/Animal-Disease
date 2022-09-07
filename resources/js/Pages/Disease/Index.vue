@@ -151,7 +151,7 @@ function save(){
 
           <template #default>
                 
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 my-5 bg-white shadow">
                     <button @click="isActive = true, create(), modalTitle ='Create Disease'" class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" >
                         <svg class="mr-2 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             version="1.1" width="24" height="24" viewBox="0 0 24 24">
