@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Animal;
+use App\Models\Disease;
 use Illuminate\Http\Request;
 
-class AnimalController extends Controller
+class DiseaseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,9 @@ class AnimalController extends Controller
      */
     public function index()
     {
-        $animals = Animal::all();
-        return Inertia::render('Animal/Index',compact('animals'));
+        $diseases = Disease::all();
+
+        return Inertia::render('Disease/Index',compact('diseases'));
     }
 
     /**
@@ -39,40 +40,32 @@ class AnimalController extends Controller
     {
         $validate = $request->validate([
             'name'=> 'required',
-            'breed'=> 'required',
-            'type'=> 'required',
-            'gender'=> 'required',
-            'age'=> 'required|numeric',
-            
+            'description'=> 'required',
         ]);
 
-        $animal = new Animal;
-        $animal->name = $request->name;
-        $animal->gender = $request->gender;
-        $animal->type = $request->type;
-        $animal->age = $request->age;
-        $animal->breed = $request->breed;
-        $animal->save();
+        $disease = new Disease;
+        $disease->name = $request->name;
+        $disease->description = $request->description;
+        $disease->save();
 
-        // return redirect(route('animal.index'));
+        return redirect(route('disease.index'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Disease  $disease
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-       $animal = Animal::find($id);
-       return Inertia::render('Animal/AnimalDetails',compact('animal'));
+        
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Disease  $disease
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -84,37 +77,30 @@ class AnimalController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Disease  $disease
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $validate = $request->validate([
             'name'=> 'required',
-            'breed'=> 'required',
-            'type'=> 'required',
-            'gender'=> 'required',
-            'age'=> 'required|numeric',
-            
+            'description'=> 'required',
         ]);
 
-        $animal = Animal::find($id);
-        $animal->name = $request->name;
-        $animal->gender = $request->gender;
-        $animal->type = $request->type;
-        $animal->age = $request->age;
-        $animal->breed = $request->breed;
-        $animal->save();
+        $disease = Disease::find($id);
+        $disease->name = $request->name;
+        $disease->description = $request->description;
+        $disease->save();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Disease  $disease
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Animal::find($id)->delete();
+        Disease::find($id)->delete();
     }
 }

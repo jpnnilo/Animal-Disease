@@ -9,56 +9,51 @@ import { reactive } from 'vue';
 
 
 const props = defineProps({
-    animals: Array,
+    diseases: Array,
     // form:{},
 });
+
 
 
 let form = useForm({
     id:'',
     name:'',
-    age: 0,
-    breed:'',
-    type:'',
-    gender:'',
+    description: '',
+    
 
 });
 
 let isActive = ref(false);
 let modalTitle = '';
 
-function destroy(animalId){
-    form.delete(route('animal.destroy', animalId));
+function destroy(diseaseId){
+    form.delete(route('disease.destroy', diseaseId));
 }
 
 function create(){
+    modalTitle = 'Create disease';
+    console.log(modalTitle);
     form.id = "";
     form.name = "";
-    form.age = "";
-    form.gender = "";
-    form.type = "";
-    form.breed = "";
+    form.description = "";
 }
 
 function store(){
     console.log(form);
-    form.post(route('animal.store',form)); 
+    form.post(route('disease.store',form)); 
 } 
 
-function edit(animal){
-    console.log(animal);
-    modalTitle = "Update Animal";
-    form.id = animal.id;    
-    form.name = animal.name;
-    form.age = animal.age;
-    form.gender = animal.gender;
-    form.type = animal.type;
-    form.breed = animal.breed;
-    return modalTitle;
+function edit(disease){
+    console.log(disease);
+    modalTitle = "Update disease";
+    form.id = disease.id;    
+    form.name = disease.name;
+    form.description = disease.description;
+ 
 }
 
-function update(animalId){
-    form.put(route('animal.update', animalId)); 
+function update(diseaseId){
+    form.put(route('disease.update', diseaseId)); 
 } 
 
 function save(){
@@ -68,13 +63,14 @@ function save(){
         store()
         create()
     }
+
 }
 
 
 </script>
 
-
 <template>
+
 <div class="container mx-auto">
     <div class="flex justify-center ">
       <div
@@ -109,43 +105,17 @@ function save(){
                     </label>
                     <input type="text" v-model="form.name" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
                 </div>
+                <div v-if="form.errors.name">{{ form.errors.name }}</div>
 
                 <div class="my-3">
                     <label for="breed" class="mb-3 block text-base font-medium text-[#07074D]" >
-                        Breed:
-                    </label>
-                    <input type="text" v-model="form.breed" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                </div>
-                
-                <div class="my-3">
-                    <label for="age" class="mb-3 block text-base font-medium text-[#07074D]" >
-                        Age:
-                    </label>
-                    <input type="text" v-model="form.age" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                </div>
-
-                <div class="my-3">
-                    <label for="age"  class="mb-3 block text-base font-medium text-[#07074D]" >
-                        Type:
-                    </label>
-                    <select v-model="form.type" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-                        <option value="">--Please select type--</option>
-                        <option>Cat</option>
-                        <option>Dog</option>
-                    </select>
-                </div>
-                <div class="mt-3 mb-8">
-                    <label for="age" class="mb-3 block text-base font-medium text-[#07074D]" >
-                        Gender
+                        Description:
                     </label>
                     
-                    <input type="radio" name="gender" v-model="form.gender" value="Male" class=" rounded-md border border-[#e0e0e0] bg-white text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                    <label class="ml-1 mr-4">Male</label>
-                    
-                    <input type="radio" name="gender" v-model="form.gender" value="Female" class=" rounded-md border border-[#e0e0e0] bg-white text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                    <label class="ml-1">Female</label>
-                </div>
+                    <textarea v-model="form.description" cols="40" rows="5" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
 
+                </div>
+                <div v-if="form.errors.description">{{ form.errors.description }}</div>
                 
                 <div class="mt-4">
             
@@ -168,12 +138,12 @@ function save(){
 
 
 
-    <Head title="Animal" />
+    <Head title="Disease"/>
 
     <BreezeAuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight inline-block">
-                List of Animal   
+                List of Disease   
             </h2> 
            
 
@@ -182,65 +152,45 @@ function save(){
           <template #default>
                 
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <button @click="isActive = true, create, modalTitle = 'Create Animal'" class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" >
+                    <button @click="isActive = true, create(), modalTitle ='Create Disease'" class="flex rounded-md bg-blue-500 py-2 px-4 mb-2 text-white transition-all duration-150 ease-in-out hover:bg-blue-600 block float-right" >
                         <svg class="mr-2 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             version="1.1" width="24" height="24" viewBox="0 0 24 24">
                             <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
-                        Create Animal
+                        Create Disease
                     </button>
-                    <table class="min-w-max w-full table-auto">
+                    <table class="min-w-max w-full table-fixed">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-lg leading-normal">
                                 <th class="py-3 px-6 text-left">Name</th>
-                                <th class="py-3 px-6 text-left">Type</th>
-                                <th class="py-3 px-6 text-center">Breed</th>
-                                <th class="py-3 px-6 text-center">Gender</th>
-                                <th class="py-3 px-6 text-center">Age</th>
+                                <th class="py-3 px-6 text-left">Description</th>
                                 <th class="py-3 px-6 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-lg font-light">
-                            <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="animal in animals" :key="animal">
+                            <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="disease in diseases" :key="disease">
                                 <td class="py-3 px-6 text-left whitespace-nowrap">
                                     <div class="flex items-center">
                                         
-                                        <span class="font-medium">{{ animal.name }}</span>
+                                        <span class="font-medium">{{ disease.name }}</span>
                                     </div>
                                 </td>
-                                <td class="py-3 px-6 text-left">
-                                    <div class="flex items-center">
+                                <td class="py-3 px-6 text-left text-base ">
+                                    <div class="flex items-center ">
                                         
-                                        <span>{{ animal.type }}</span>
+                                        <span >{{ disease.description }}</span>
                                     </div>
                                 </td>
-                                <td class="py-3 px-6 text-center">
-                                    <div class="flex items-center justify-center">
-                                        {{ animal.breed }}
-                                    </div>
-                                </td>
-                                <td class="py-3 px-6 text-center">
-                                    {{ animal.gender }}
-                                </td>
-                                <td class="py-3 px-6 text-center">
-                                    {{ animal.age }}
-                                </td>
+                        
                               
                                 <td class="py-3 px-6 text-center">
                                     <div class="flex item-center justify-center">
-                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
-                                            <Link :href="route('animal.show', animal.id)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                </svg>
-                                            </Link>
-                                        </div>
-                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer" @click="isActive = true , edit(animal), modalTitle = 'Edit Animal'">
+                               
+                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer" @click="isActive = true , edit(disease), modalTitle ='Update Disease'">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                             </svg>
                                         </div>
-                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer" @click="destroy(animal.id)">
+                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer" @click="destroy(disease.id)">
                                            
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
