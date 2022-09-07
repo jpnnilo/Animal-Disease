@@ -67,7 +67,7 @@ function removeDisease(animal_id, disease_id){
                         </div>
 
                         <!-- Meta Body -->
-                        <div class="flex flex-col px-6">
+                        <div class="flex flex-col">
                           <!-- Username Container -->
                           <div class="flex h-8 flex-row">
                             <!-- Username -->
@@ -79,13 +79,13 @@ function removeDisease(animal_id, disease_id){
                           <div class="my-2 flex flex-row space-x-2">
                             <!-- Badge Role -->
                             <div class="flex flex-row">
-                              <div class="text-base text-gray-600">Status: <Span> Healthy</Span></div>
+                              <div class="text-base text-gray-600">Status: <Span v-if="animal.diseases.length"> Sick</Span> <Span v-else> Healthy</Span></div>
                             </div>
 
                           </div>
 
                           <!-- Mini Cards -->
-                          <div class="mt-2 flex flex-row items-center space-x-5">
+                          <div class="mt-2 flex flex-row items-center">
                         
                             <div class="flex h-20 w-40 flex-col items-center justify-center">
                               <div class="flex flex-row items-center justify-center">

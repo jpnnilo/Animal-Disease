@@ -47,8 +47,6 @@ class DiseaseController extends Controller
         $disease->name = $request->name;
         $disease->description = $request->description;
         $disease->save();
-
-        return redirect(route('disease.index'));
     }
 
     /**
