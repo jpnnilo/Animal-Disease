@@ -1,4 +1,6 @@
 <script setup>
+import AnimalInputText from './AnimalInputText.vue'
+
 const props = defineProps(['modalTitle','form','isActive'])
 
 const emits = defineEmits(['isActive', 'save']);
@@ -19,30 +21,11 @@ const emits = defineEmits(['isActive', 'save']);
                         </svg>
                     </div>
                     <form @submit.prevent="emits('save', form)">
-                        <div class="my-3">
-                            <label for="email" class="mb-3 block text-base font-medium text-[#07074D]" >
-                                Name:
-                            </label>
-                            <input type="text" v-model="form.name" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                        </div>
-                        <div v-if="form.errors.name">{{ form.errors.name }}</div>
 
-                        <div class="my-3">
-                            <label for="breed" class="mb-3 block text-base font-medium text-[#07074D]" >
-                                Breed:
-                            </label>
-                            <input type="text" v-model="form.breed" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                        </div>
-                        <div v-if="form.errors.breed">{{ form.errors.breed }}</div>
+                        <AnimalInputText :title="'Name'" v-model="form.name" :error="form.errors.name"/>
+                        <AnimalInputText :title="'Breed'" v-model="form.breed" :error="form.errors.breed"/>
+                        <AnimalInputText :title="'Age'" v-model="form.age" :error="form.errors.age"/>
                         
-                        <div class="my-3">
-                            <label for="age" class="mb-3 block text-base font-medium text-[#07074D]" >
-                                Age:
-                            </label>
-                            <input type="text" v-model="form.age" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-                        </div>
-                        <div v-if="form.errors.age">{{ form.errors.age }}</div>
-
                         <div class="my-3">
                             <label for="age"  class="mb-3 block text-base font-medium text-[#07074D]" >
                                 Type:
