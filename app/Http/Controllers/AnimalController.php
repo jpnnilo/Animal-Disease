@@ -30,15 +30,8 @@ class AnimalController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $validate = $request->validate([
+    private function validated($request){
+        $validated = $request->validate([
             'name'=> 'required',
             'breed'=> 'required',
             'type'=> 'required',
@@ -47,27 +40,21 @@ class AnimalController extends Controller
             
         ]);
 
-        $animal = new Animal;
-        $animal->name = $request->name;
-        $animal->gender = $request->gender;
-        $animal->type = $request->type;
-        $animal->age = $request->age;
-        $animal->breed = $request->breed;
-        $animal->save();
-
-        // return redirect(route('animal.index'));
+        return $validated;
     }
 
-    public function addDisease(Request $request){
-        
-        
-        $validate = $request->validate([
-            'disease_id'=> 'required',
-        ]);
-        $animal = Animal::find($request->animal_id);
-        $animal->diseases()->attach($request->disease_id);
-
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validated = $this->validated($request);
+        Animal::create($validated);
     }
+
  
     /**
      * Display the specified resource.
@@ -78,19 +65,13 @@ class AnimalController extends Controller
     public function show($id)
     {
         $animal = Animal::with('diseases')->find($id);
-        foreach ($animal->diseases as $diseases) {
-            $disease_array[] = $diseases->pivot->disease_id;
-            //get all diseases id from pivot table then pass it to array
-       }
-           
-       //this is to populate dropdown and check if the animal already has that disease
-       if(empty($disease_array)){
-           $diseases = Disease::all();
-             
-       }else{
-           $diseases = Disease::whereNotIn('id', $disease_array)->get();
-           //select all diseases id where not in id of array $disease_array
-       }
+
+        //get all disease ID
+        $disease_pluck = $animal->diseases->pluck('id');
+
+       //populate dropdown and check if the animal already has that disease
+       //select all diseases id where not in id of array $disease_array
+       $diseases = Disease::whereNotIn('id', $disease_pluck)->get();
 
        
        return Inertia::render('Animal/AnimalDetails',compact('animal', 'diseases'));
@@ -116,22 +97,8 @@ class AnimalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validate = $request->validate([
-            'name'=> 'required',
-            'breed'=> 'required',
-            'type'=> 'required',
-            'gender'=> 'required',
-            'age'=> 'required|numeric',
-            
-        ]);
-
-        $animal = Animal::find($id);
-        $animal->name = $request->name;
-        $animal->gender = $request->gender;
-        $animal->type = $request->type;
-        $animal->age = $request->age;
-        $animal->breed = $request->breed;
-        $animal->save();
+        $validated = $this->validated($request);
+        Animal::where('id', $id)->update($validated);
     }
 
 
@@ -146,9 +113,22 @@ class AnimalController extends Controller
         Animal::find($id)->delete();
     }
 
+    public function addDisease(Request $request){
+        
+        
+        $validate = $request->validate([
+            'disease_id'=> 'required',
+        ]);
+        $animal = Animal::find($request->animal_id);
+        $animal->diseases()->attach($request->disease_id);
+
+    }
+
     public function removeDisease(Request $request)
     {   
         $animal = Animal::find($request->animal_id);
         $animal->diseases()->detach($request->disease_id);
-    }   
+    }  
+
+  
 }

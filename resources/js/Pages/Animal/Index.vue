@@ -143,7 +143,7 @@ function save(){
                         </thead>
                         <tbody class="text-gray-600 text-lg font-light">
                             <tr class="border-b border-gray-200 hover:bg-gray-100" v-for="animal in animals" :key="animal">
-                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                <td class="py-3 px-6 text-left ">
                                     <div class="flex items-center">
                                         
                                         <span class="font-medium">{{ animal.name }}</span>

@@ -10,6 +10,8 @@ class Animal extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name','type','breed','gender','age'];
+
     public function diseases(){
         return $this->belongsToMany(Disease::class);
     }

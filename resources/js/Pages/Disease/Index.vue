@@ -147,8 +147,8 @@ function save(){
                                         <span >{{ disease.description }}</span>
                                     </div>
                                 </td>
-                        
-                              
+                                
+
                                 <td class="py-3 px-6 text-center">
                                     <div class="flex item-center justify-center">
                                
